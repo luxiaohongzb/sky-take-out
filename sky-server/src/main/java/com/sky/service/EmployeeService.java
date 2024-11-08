@@ -5,7 +5,10 @@ import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.result.PageResult;
+import org.springframework.stereotype.Service;
 
+
+@Service
 public interface EmployeeService {
 
     /**
@@ -41,4 +44,12 @@ public interface EmployeeService {
      * @param employeeDTO
      */
     void update(EmployeeDTO employeeDTO);
+
+    /**
+     *
+     *通过id查询用户
+     * @param id
+     * @return
+     */
+    Employee getById(Long id);
 }

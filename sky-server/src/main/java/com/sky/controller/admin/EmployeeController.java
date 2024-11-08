@@ -11,6 +11,7 @@ import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.EmployeeLoginVO;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.xmlbeans.impl.xb.xsdschema.Public;
@@ -25,6 +26,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/admin/employee")
+@Api(tags = "员工相关接口")
 @Slf4j
 public class EmployeeController {
 
@@ -94,12 +96,23 @@ public class EmployeeController {
     @PostMapping("/status/{status}")
     public Result StartOrStop(@PathVariable Integer status,Long id){
         employeeService.startOrStop(status,id);
-        return null;
+        return Result.success();
     }
     @PutMapping
+    @ApiOperation("编辑员工信息")
     public Result update(@RequestBody EmployeeDTO employeeDTO){
         log.info("编辑员工信息，{}",employeeDTO);
         employeeService.update(employeeDTO);
         return Result.success();
     }
+
+    @GetMapping("/{id}")
+    @ApiOperation("根据id查询用户")
+    public Result<Employee> getEmployeeById(@PathVariable Long id){
+        log.info("查询用户信息,id为{}",id);
+        Employee employee = employeeService.getById(id);
+        return Result.success(employee);
+    }
+
+
 }

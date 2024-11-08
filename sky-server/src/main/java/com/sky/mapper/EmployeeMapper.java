@@ -38,4 +38,8 @@ public interface EmployeeMapper {
 
     @AutoFill(OperationType.UPDATE)
     void update(Employee employee);
+
+
+    @Select("select * from employee where id = #{id}")
+    Employee getById(Long id);
 }
