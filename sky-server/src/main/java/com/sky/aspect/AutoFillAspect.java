@@ -6,19 +6,28 @@ import com.sky.context.BaseContext;
 import com.sky.enumeration.OperationType;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 
 
 @Slf4j
+@Aspect
+@Component
 public class AutoFillAspect {
 
 
     @Pointcut("execution(* com.sky.mapper.*.*(..))&&@annotation(com.sky.annotation.AutoFill)")
-    public void AutoFillCut(JoinPoint joinPoint){
+    public void autoFillCut(){}
+
+    @Before("autoFillCut()")
+    public void autoFill(JoinPoint joinPoint)
+    {
         log.info("开始进行字段填充");
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         AutoFill autoFill = methodSignature.getMethod().getAnnotation(AutoFill.class);
@@ -33,7 +42,7 @@ public class AutoFillAspect {
         LocalDateTime now = LocalDateTime.now();
 
         Long currentId = BaseContext.getCurrentId();
-
+        log.info("id,{}",currentId);
         if(operationType == OperationType.INSERT){
           try {
               Method setCreateTime = entity.getClass().getDeclaredMethod(AutoFillConstant.SET_CREATE_TIME, LocalDateTime.class);
